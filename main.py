@@ -6,6 +6,10 @@ import os
 # create the Flask app
 app = Flask(__name__)
 
+@app.route('/', methods=['GET'])
+def start_page():
+    return "Hi"
+
 @app.route('/device', methods=['GET', 'POST', 'PUT'])
 def device():
     device_info = []
