@@ -1,43 +1,32 @@
-# import main Flask class and request object
 from flask import Flask, request
-import json
-import os
 
-# create the Flask app
 app = Flask(__name__)
+devices = []
+
+
+@app.route('/device', methods=['POST'])
+def create_device():
+    if request.method == 'POST':
+        app.logger.info(request.get_data())
+        devices.append(request.get_json())
+        return request.get_json()
+
+
+@app.route('/device', methods=['PUT'])
+def update_device():
+    if request.method == 'PUT':
+        app.logger.info(request.get_data())
+        devices.append(request.get_json())
+        return request.get_json()
+
 
 @app.route('/', methods=['GET'])
-def start_page():
-    return "Hi"
-
-@app.route('/device', methods=['GET', 'POST', 'PUT'])
-def device():
-    device_info = []
-    if request.method == 'POST':
-        with open('data.json', 'a') as outfile:
-            json.dump(request.get_json(), outfile)
-            outfile.write('\n')
-        return request.get_json()
+def device_info():
     if request.method == 'GET':
-        with open('data.json') as outfile:
-            [device_info.append(line.strip().replace('"', '')) for line in outfile.readlines()]
-#            data = outfile.readline()
-        return device_info
-    if request.method == 'PUT':
-        with open('data.json', 'a') as outfile:
-            json.dump(request.get_json(), outfile)
-            outfile.write('\n')
-        return request.get_json()
-    return 'Incorrect request'
+        app.logger.info(devices)
+        return devices
 
-@app.route('/delete', methods=['POST'])
-def delete():
-    if request.method == 'POST':
-        pwd = os.getcwd()
-        os.remove(f"{pwd}\data.json")
-        return 'ok'
-    return 'Incorrect request'
 
 if __name__ == '__main__':
-    # run app in debug mode on port 5000
-    app.run(host="0.0.0.0", port=5000)
+    app.run(host="0.0.0.0", port=5000, debug=True)
+
