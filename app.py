@@ -19,12 +19,13 @@ def update_device():
         devices.append(request.get_json())
         return request.get_json()
 
+
 @app.route('/clear', methods=['POST'])
 def clear_device():
     if request.method == 'POST':
         app.logger.info(request.get_data())
-        devices = []
-        return devices
+        del devices[:]
+        return 'ok'
 
 
 @app.route('/', methods=['GET'])
