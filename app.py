@@ -17,7 +17,7 @@ def update_device():
     if request.method == 'PUT':
         app.logger.info(request.get_data())
         devices.append(request.get_json())
-        return request.get_json(
+        return request.get_json()
 
 @app.route('/clear', methods=['POST'])
 def clear_device():
